@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": true,
+        "sourceMap": true,
+        "experimentalDecorators": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+	"strictNullChecks": true,
+	"importHelpers": true,
+        "outDir": ".",
+        "lib": ["es6", "dom"]
+    },
+    "files": [
+        "./i18n.ts"
+    ]
+
+}

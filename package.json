@@ -1,0 +1,19 @@
+{
+  "name": "domic-i18n",
+  "version": "0.1.0",
+  "repository": "https://github.com/domicjs/domic-observable",
+  "description": "Observables, domic style.",
+  "license": "MIT",
+  "typings": "./i18n.d.ts",
+  "main": "./i18n.js",
+  "scripts": {
+    "build": "tsc",
+    "prepublish": "npm run build",
+    "watch": "tsc -w",
+    "test": "tscc test.ts && mocha",
+    "dev": "parallel -u ::: 'tscc -w' 'ls *.js | entr mocha -R dot '"
+  },
+  "dependencies": {
+    "tslib": "*"
+  }
+}
