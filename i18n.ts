@@ -1,5 +1,5 @@
 
-import {o, Display, Observable, TransformObservable, MaybeObservable} from 'domic'
+import {o, Observable, TransformObservable, MaybeObservable} from 'domic'
 
 export const LANG: Observable<string> = o(navigator.language.slice(0, 2))
 
@@ -42,10 +42,12 @@ export class I18nObservable extends TransformObservable<string, string> {
   public trads: {[code: string]: string} = {}
 
   constructor() {
-    super(LANG, function (this: I18nObservable, lang: string) {
-      if (!this.trads || !this.trads[lang]) return ''
-      return this.trads[lang]
-    }, undefined)
+    super(
+      LANG,
+      function (this: I18nObservable, lang: string) {
+        if (!this.trads || !this.trads[lang]) return ''
+        return this.trads[lang]
+      }, undefined, undefined)
   }
 }
 
@@ -60,12 +62,10 @@ export class I18nObject<T> {
    * Use into the dom.
    * @param ctx
    */
-  use(arg: MaybeObservable<T>): Node {
-    return Display(o.merge({lang: LANG, arg: arg}).tf(val => {
+  use(arg: MaybeObservable<T>): Observable<string|Node> {
+    return o.merge({lang: LANG, arg: arg}).tf(val => {
       var res = (this.trads[val.lang] as any)(val.arg)
-      if (typeof res === 'string')
-        return document.createTextNode(res)
       return res
-    }))
+    })
   }
 }
