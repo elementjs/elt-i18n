@@ -1,5 +1,5 @@
 
-import {o, Observable, TransformObservable, MaybeObservable} from 'domic'
+import {o, Observable, MaybeObservable, VirtualObservable} from 'elt'
 
 export const LANG: Observable<string> = o(navigator.language.slice(0, 2))
 
@@ -21,36 +21,20 @@ export function P(n: number, plural: string, singular: string) {
 
 export function S(n: number) { return P(n, 's', '')}
 
-export function L(l: Languages<Node>): I18nObservable<Node>
-export function L(l: Languages<string>): I18nObservable<string>
-export function L(l: Languages<string|Node>): I18nObservable<string|Node>
+export function L(l: Languages<Node>): VirtualObservable<Node>
+export function L(l: Languages<string>): VirtualObservable<string>
+export function L(l: Languages<string|Node>): VirtualObservable<string|Node>
 export function L<T>(l: Languages<TradFn<T>>): I18nObject<T>
 export function L(l: Languages<any>): any {
   for (var x in l) {
-    var prop = (l as any)[x]
+    var prop = l[x]
     if (typeof prop === 'string' || prop instanceof Node) {
-      var res = new I18nObservable()
-      res.trads = l as any // I know what I'm doing !!
-      return res
+      return LANG.tf(lang => l[lang])
     } else {
       var res2 = new I18nObject<any>()
       res2.trads = l as any // here too.
       return res2
     }
-  }
-}
-
-
-export class I18nObservable<T> extends TransformObservable<string, T> {
-  public trads: {[code: string]: string|Node} = {}
-
-  constructor() {
-    super(
-      LANG,
-      function (this: I18nObservable<T>, lang: string) {
-        if (!this.trads || !this.trads[lang]) return '' as any
-        return this.trads[lang]
-      }, undefined, undefined)
   }
 }
 
